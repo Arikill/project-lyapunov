@@ -25,7 +25,7 @@ const (
 func main() {
 	eqPt := equilibriumPointsGradientDecent()
 	fmt.Println("The eq points are: ", eqPt)
-	fmt.Println("The value at equilibrium is: ", gradientOfMembranePotential(-eqPt))
+	fmt.Println("The value at equilibrium is: ", gradientOfMembranePotential(eqPt))
 }
 
 func computeAlpha(gateType string, v float64) float64 {
