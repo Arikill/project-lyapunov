@@ -25,7 +25,7 @@ const (
 func main() {
 	eqPt := equilibriumPointsGradientDecent()
 	fmt.Println("The eq points are: ", eqPt)
-	fmt.Println("The value at equilibrium is: ", gradientOfMembranePotential(eqPt))
+	fmt.Println("The value at equilibrium is: ", gradientOfMembranePotential(eqPt[0]))
 }
 
 func computeAlpha(gateType string, v float64) float64 {
@@ -111,15 +111,16 @@ func gradientOfObjectiveFunction(v float64) float64 {
 	return (gradientOfGradientOfMembranePotential(v) * gradientOfMembranePotential(v))
 }
 
-func equilibriumPointsGradientDecent() float64 {
+func equilibriumPointsGradientDecent() []float64 {
 	var (
-		vCurrent     float64 = Er
-		costCurrent  float64
-		vNext        float64
-		costNext     float64
-		learningRate float64 = 0.01
-		precision    float64 = 1E-4
-		iteration    int     = 0
+		vCurrent          = Er
+		costCurrent       float64
+		vNext             float64
+		costNext          float64
+		learningRate      = 0.01
+		precision         = 1E-10
+		iteration         int
+		equilibriumPoints = make([]float64, 4)
 	)
 	for true {
 		costCurrent = gradientOfMembranePotential(vCurrent)
@@ -133,5 +134,18 @@ func equilibriumPointsGradientDecent() float64 {
 		vCurrent = vNext
 		iteration++
 	}
-	return vNext
+	nAlpha := computeAlpha("n", vNext)
+	mAlpha := computeAlpha("m", vNext)
+	hAlpha := computeAlpha("h", vNext)
+	nBeta := computeBeta("n", vNext)
+	mBeta := computeBeta("m", vNext)
+	hBeta := computeBeta("h", vNext)
+	n := computeGateValue(nAlpha, nBeta)
+	m := computeGateValue(mAlpha, mBeta)
+	h := computeGateValue(hAlpha, hBeta)
+	equilibriumPoints[0] = vNext
+	equilibriumPoints[1] = m
+	equilibriumPoints[2] = h
+	equilibriumPoints[3] = n
+	return equilibriumPoints
 }
