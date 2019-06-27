@@ -72,5 +72,6 @@ func gradientOfMembranePotential(v float64) float64 {
 	m := computeGateValue(mAlpha, mBeta)
 	h := computeGateValue(hAlpha, hBeta)
 
+	// Compute dv/dt
 	return ((1 / Cm) * ((-gNa * math.Pow(m, 3) * h * (v - ENa)) - (gK * math.Pow(n, 4) * (v - EK)) - (gl * (v - Er))))
 }
