@@ -6,6 +6,7 @@ func ComputeEquilibrium() []float64 {
 }
 
 // ComputeLyapunovStability a wrapper that computes lyapunov stability of hhmodel.
-func ComputeLyapunovStability() {
-
+func ComputeLyapunovStability(v float64) {
+	futureStates := computeFutureStates(v)
+	computeFutureStatesJacobian(futureStates)
 }
