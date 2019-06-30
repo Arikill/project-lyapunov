@@ -49,7 +49,7 @@ func equilibriumPointsGradientDecent() []float64 {
 		costCurrent = gradientOfMembranePotential(vCurrent)
 		vNext = vCurrent - learningRate*gradientOfMembranePotential(vCurrent)
 		costNext = gradientOfMembranePotential(vNext)
-		fmt.Println("Current cost: ", costCurrent)
+		// fmt.Println("Current cost: ", costCurrent)
 		learningRate = (vNext - vCurrent) / math.Abs(gradientOfObjectiveFunction(vNext)-gradientOfObjectiveFunction(vCurrent))
 		if math.Abs(costNext-costCurrent) <= precision || math.IsNaN(vNext) || math.IsNaN(learningRate) {
 			fmt.Println("Converged! Minimum cost: ", costNext, " @ ", vNext)
