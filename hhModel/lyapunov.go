@@ -1,7 +1,6 @@
 package hhmodel
 
 import (
-	"fmt"
 	"log"
 	"math"
 
@@ -112,12 +111,10 @@ func computeFutureStatesJacobian(states []float64) []float64 {
 	result[14] = dnBydh
 	result[15] = dnBydn
 
-	fmt.Println(result)
-
 	return result
 }
 
-func stability(rows int, cols int, slice []float64) []complex128 {
+func stability(rows int, cols int, slice []float64) bool {
 	// Generate a 6×6 matrix of random values.
 	a := mat.NewDense(rows, cols, slice)
 	var eig mat.Eigen
@@ -126,24 +123,24 @@ func stability(rows int, cols int, slice []float64) []complex128 {
 		log.Fatal("Eigendecomposition failed")
 	}
 	eigenValues := eig.Values(nil)
-	fmt.Printf("Eigenvalues of A:\n%v\n", eigenValues)
+	// fmt.Printf("Eigenvalues of A:\n%v\n", eigenValues)
 	for _, value := range eigenValues {
 		if real(value) > 0 {
-			panic("system is unstable!")
+			return false
 		}
 	}
-	return eigenValues
+	return true
 }
 
 func lipschitz(v1 float64, v2 float64) bool {
-	dv1 := gradientOfMembranePotential(v1)
-	dv2 := gradientOfMembranePotential(v2)
-	fmt.Println(v1)
-	fmt.Println(dv1)
-	if math.Sqrt(math.Pow(dv1-dv2, 2)) <= math.Sqrt(math.Pow(v1-v2, 2)) {
-		fmt.Println("Continuously differentiable!")
-		return true
+	dv1dt := gradientOfMembranePotential(v1)
+	dv2dt := gradientOfMembranePotential(v2)
+	if math.Abs(dv1dt-dv2dt)/math.Abs(v1-v2) >= 0 {
+		d2v1dt2 := gradientOfGradientOfMembranePotential(v1)
+		d2v2dt2 := gradientOfGradientOfMembranePotential(v2)
+		if math.Abs(d2v1dt2-d2v2dt2)/math.Abs(dv1dt-dv2dt) >= 0 {
+			return true
+		}
 	}
-	fmt.Println("Not Continuously differentiable!")
 	return false
 }

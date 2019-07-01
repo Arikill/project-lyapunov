@@ -8,9 +8,9 @@ import (
 
 func main() {
 	eqpts := hhmodel.ComputeEquilibrium()
-	fmt.Println("V: ", eqpts[0])
-	fmt.Println("m: ", eqpts[1])
-	fmt.Println("h: ", eqpts[2])
-	fmt.Println("n: ", eqpts[3])
-	hhmodel.ComputeLyapunovStability(eqpts[0])
+	// fmt.Println("V: ", eqpts[0])
+	// fmt.Println("m: ", eqpts[1])
+	// fmt.Println("h: ", eqpts[2])
+	// fmt.Println("n: ", eqpts[3])
+	fmt.Println("Stable? : ", hhmodel.ComputeSystemStability(eqpts[0]))
 }
